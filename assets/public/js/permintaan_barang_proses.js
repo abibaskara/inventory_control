@@ -2,6 +2,14 @@ $(function() {
     var id_permintaan = $('#id').val();
     show_permintaan(id_permintaan)
 
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+    });
+
     $('#form_proses').on('submit', function(){
         $.ajax({
             url: '../../Backend/ProsesPermintaan',
@@ -10,6 +18,10 @@ $(function() {
             data: $('#form_proses').serialize(),
 
             success: function (x) { 
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Berhasil Proses Permintaan',
+                })
             }
         })
     })

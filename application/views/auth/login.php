@@ -32,6 +32,8 @@
     <!-- End layout styles -->
 
     <link rel="shortcut icon" href="<?= base_url() ?>assets/images/favicon.png" />
+
+    <link rel="stylesheet" href="<?= base_url() ?>assets/vendors/sweetalert2/sweetalert2.min.css">
 </head>
 
 <body>
@@ -45,7 +47,9 @@
                             <div class="row">
                                 <div class="col-md-4 pe-md-0">
                                     <div class="auth-side-wrapper" style="background-image:url(<?= base_url() ?>assets/inven3.jpg)">
-
+                                        <div class="flash-data-success" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
+                                        <div class="flash-data-info" data-flashdata="<?= $this->session->flashdata('info'); ?>"></div>
+                                        <div class="flash-data-error" data-flashdata="<?= $this->session->flashdata('error'); ?>"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-8 ps-md-0">
@@ -88,11 +92,13 @@
     <!-- inject:js -->
     <script src="<?= base_url() ?>assets/vendors/feather-icons/feather.min.js"></script>
     <script src="<?= base_url() ?>assets/js/template.js"></script>
+    <script src="<?= base_url() ?>assets/vendors/sweetalert2/sweetalert2.min.js"></script>
     <!-- endinject -->
 
     <!-- Custom js for this page -->
     <!-- End custom js for this page -->
 
+    <script src="<?= base_url() ?>assets/public/js/login.js"></script>
 </body>
 
 </html>
