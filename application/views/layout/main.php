@@ -277,12 +277,29 @@
                                     </div>
                                 </div>
                                 <ul class="list-unstyled p-1">
-                                    <li class="dropdown-item py-2">
-                                        <a href="<?= base_url() ?>Inventory/Profile" class="text-body ms-0">
-                                            <i class="me-2 icon-md" data-feather="user"></i>
-                                            <span>Profile</span>
-                                        </a>
-                                    </li>
+                                    <?php if ($_SESSION['role'] == 'Inventory') { ?>
+                                        <li class="dropdown-item py-2">
+                                            <a href="<?= base_url() ?>Inventory/Profile" class="text-body ms-0">
+                                                <i class="me-2 icon-md" data-feather="user"></i>
+                                                <span>Profile</span>
+                                            </a>
+                                        </li>
+                                    <?php } elseif ($_SESSION['role'] == 'Produksi') { ?>
+                                        <li class="dropdown-item py-2">
+                                            <a href="<?= base_url() ?>Produksi/Profile" class="text-body ms-0">
+                                                <i class="me-2 icon-md" data-feather="user"></i>
+                                                <span>Profile</span>
+                                            </a>
+                                        </li>
+                                    <?php } elseif ($_SESSION['role'] == 'Manager') { ?>
+                                        <li class="dropdown-item py-2">
+                                            <a href="<?= base_url() ?>Manager/Profile" class="text-body ms-0">
+                                                <i class="me-2 icon-md" data-feather="user"></i>
+                                                <span>Profile</span>
+                                            </a>
+                                        </li>
+                                    <?php } ?>
+
                                     <li class="dropdown-item py-2">
                                         <a href="<?= base_url() ?>Auth/Logout" class="text-body ms-0">
                                             <i class="me-2 icon-md" data-feather="log-out"></i>

@@ -37,4 +37,9 @@ class Produksi extends CI_Controller
         $data['id'] = $id;
         $this->template->load('layout/main', 'produksi/request_permintaan_barang_edit', $data);
     }
+
+    public function Profile()
+    {
+        $this->template->load('layout/main', 'produksi/profile');
+    }
 }
