@@ -121,7 +121,7 @@
 
                         <div class="card-footer">
                             <!-- <div class="d-flex post-actions"> -->
-                            <button id="save" class="btn btn-success"><i class="fa fa-save"></i> Simpan</button>
+                            <button id="save" type="submit" class="btn btn-success"><i class="fa fa-save"></i> Simpan</button>
                             <button id="back" class="btn btn-secondary"><i class="fa fa-arrow-circle-o-left"></i> Back</button>
                             <!-- </div> -->
                         </div>
@@ -142,6 +142,7 @@
 <!-- endinject -->
 
 <!-- Plugin js for this page -->
+<script src="<?= base_url() ?>assets/vendors/jquery-validation/jquery.validate.min.js"></script>
 <!-- End plugin js for this page -->
 
 <!-- inject:js -->

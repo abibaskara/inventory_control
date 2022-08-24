@@ -44,12 +44,12 @@
 
                     </table>
                 </div>
+                <div class="col-lg-12 grid-margin">
+                    <button type="submit" id="simpan" class="btn btn-primary btn-sm" style="width: 10%;"><i class="fa fa-save"></i> Update</button>
+                    <a href="<?= base_url() ?>Inventory/Request_Permintaan_Barang"><button type="button" class="btn btn-secondary btn-sm" style="width: 10%;"><i data-feather="arrow-left-circle"></i> Back</button></a>
+                </div>
             </form>
         </div>
-    </div>
-    <div class="col-lg-12 grid-margin">
-        <button id="simpan" type="button" class="btn btn-primary btn-sm" style="width: 10%;"><i class="fa fa-save"></i> Update</button>
-        <a href="<?= base_url() ?>Inventory/Request_Permintaan_Barang"><button type="button" class="btn btn-secondary btn-sm" style="width: 10%;"><i data-feather="arrow-left-circle"></i> Back</button></a>
     </div>
 </div>
 
@@ -78,7 +78,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="save_edit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" id="save_edit" class="btn btn-primary">Save changes</button>
                 </div>
             </form>
         </div>
@@ -111,6 +111,7 @@
 <!-- endinject -->
 
 <!-- Plugin js for this page -->
+<script src="<?= base_url() ?>assets/vendors/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/sweetalert2/sweetalert2.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/select2/select2.min.js"></script>
 <!-- End plugin js for this page -->

@@ -77,7 +77,7 @@
                     </div>
                     <div class="form-group">
                         <label for="">Foto</label>
-                        <input type="file" name="foto" id="foto" accept=".jpg, .png, .jpeg" class="form-control" required>
+                        <input type="file" name="foto" id="foto" accept=".jpg, .png, .jpeg" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -10,9 +10,6 @@ $(document).ready(function() {
             orderable: false,
             targets: 0,
         }, ],
-        order: [
-            [1, 'asc']
-        ],
         columns: [{
                 render: function(data, type, row) {
                     return `<div style="text-align:center;">${row.id_kategori}</div>`;
@@ -85,55 +82,107 @@ $(document).ready(function() {
     })
 
     $('#save_edit').click(function() {
-        $.ajax({
-            type: "GET",
-            url: "../Backend/editKategori",
-            data: $('#form_edit').serialize(),
-            dataType: "JSON",
-            cache: false,
-            processData: false,
-            beforeSend: function() {
-                $("#save_edit").prop("disabled", true).html('...Loading');
+        $("#form_edit").validate({
+            rules: {
+                nama_kategori: {
+                    required: true,
+                    minlength: 3
+                },
             },
-            success: function(value) {
-                $('#save_edit').removeAttr('disabled');
-                $('#edit').modal('hide');
-                table.ajax.reload();
+            messages: {
+                nama_kategori: {
+                    required: "Please enter a Nama Kategori Barang",
+                    minlength: "Nama Kategori Barang must consist of at least 3 characters"
+                },
+            },
+            errorPlacement: function(error, element) {
+                error.addClass( "invalid-feedback" );
+        
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                }
+                else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function () { 
+                $.ajax({
+                    type: "GET",
+                    url: "../Backend/editKategori",
+                    data: $('#form_edit').serialize(),
+                    dataType: "JSON",
+                    cache: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $("#save_edit").prop("disabled", true).html('...Loading');
+                    },
+                    success: function(value) {
+                        $('#save_edit').removeAttr('disabled');
+                        $('#edit').modal('hide');
+                        table.ajax.reload();
 
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Data Berhasil Di Update'
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data Berhasil Di Update'
+                        })
+                    },
+                    complete: function() {
+                        $("#save_edit").prop("disabled", false).html("Save Change");
+                        $("#form_edit").trigger("reset");
+                    }
                 })
-            },
-            complete: function() {
-                $("#save_edit").prop("disabled", false).html("Save Change");
-                $("#form_edit").trigger("reset");
             }
         })
     })
 
     $('#save_tambah').click(function() {
-        $.ajax({
-            url: "../Backend/tambahKategori",
-            type: "GET",
-            dataType: "JSON",
-            cache: false,
-            processData: false,
-            data: $('#form_tambah').serialize(),
-            beforeSend: function() {
-                $("#save_tambah").prop("disabled", true).html('...Loading');
+        $("#form_tambah").validate({
+            rules: {
+                nama_kategori: {
+                    required: true,
+                    minlength: 3
+                },
             },
-            success: function() {
-                $('#tambah').modal('hide');
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Data Berhasil Di Tambahkan'
+            messages: {
+                nama_kategori: {
+                    required: "Please enter a Nama Kategori Barang",
+                    minlength: "Nama Kategori Barang must consist of at least 3 characters"
+                },
+            },
+            errorPlacement: function(error, element) {
+                error.addClass( "invalid-feedback" );
+        
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                }
+                else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function () { 
+                $.ajax({
+                    url: "../Backend/tambahKategori",
+                    type: "GET",
+                    dataType: "JSON",
+                    cache: false,
+                    processData: false,
+                    data: $('#form_tambah').serialize(),
+                    beforeSend: function() {
+                        $("#save_tambah").prop("disabled", true).html('...Loading');
+                    },
+                    success: function() {
+                        $('#tambah').modal('hide');
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data Berhasil Di Tambahkan'
+                        })
+                        table.ajax.reload();
+                    },
+                    complete: function() {
+                        $("#save_tambah").prop("disabled", false).html("Save");
+                        $("#form_tambah").trigger("reset");
+                    }
                 })
-                table.ajax.reload();
-            },
-            complete: function() {
-                $("#save_tambah").prop("disabled", false).html("Save");
-                $("#form_tambah").trigger("reset");
             }
         })
     })

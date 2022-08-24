@@ -141,9 +141,12 @@ class Inventory extends CI_Controller
         $join = 'user.id_user=purchase_order.id_user';
         $data['po'] = $this->AdminModel->join_Where('purchase_order', 'user', $join, $where)->row_array();
         $where_detail['id_po'] = $data['po']['id_detail_po'];
+        // var_dump($where_detail['id_po']);
+        // die;
         $join2 = 'barang.id_barang=detail_po.id_barang';
+        $sum = 'SUM(qty_po) AS Total';
         $data['detail_po'] = $this->AdminModel->join_Where('detail_po', 'barang', $join2, $where_detail)->result();
-        $data['total'] = $this->AdminModel->count_where('detail_po', $where_detail)->row_array();
+        $data['total'] = $this->AdminModel->count_where('detail_po', $sum, $where_detail)->row_array();
         $this->load->view('inventory/po_print', $data);
     }
 

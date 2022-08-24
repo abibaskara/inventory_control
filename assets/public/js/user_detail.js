@@ -5,38 +5,98 @@ $(function() {
 
     $('#form_edit').submit(function(e) {
         e.preventDefault();
-        $.ajax({
-            url: "../../Backend/edit_user",
-            data: new FormData(this),
-            type: "POST",
-            dataType: "JSON",
-            processData: false,
-            contentType: false,
-            cache: false,
-            async: false,
-            success: function(value) {
-                if (value.status == 'Password Tidak Match!') {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Password Tidak Match'
-                    })
-                } else if (value.status == 'Gagal Upload Foto') {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Gagal Upload Foto'
-                    })
-                } else if (value.status == false) {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Gagal Update User'
-                    })
-                } else {
-                    show_profile(id)
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Data User Berhasil Di Update'
-                    })
+        var form_data = new FormData(document.getElementById("form_edit"));
+        $("#form_edit").validate({
+            rules: {
+                nama_user: {
+                    required: true,
+                },
+                jk: {
+                    required: true,
+                },
+                no_telp: {
+                    required: true,
+                },
+                id_departement: {
+                    required: true,
+                },
+                role: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+                confirm_password: {
+                    required: true,
+                    minlength: 6
                 }
+            },
+            messages: {
+                nama_user: "Please enter a Nama",
+                jk: "Please select a Jenis Kelamin",
+                no_telp: "Please enter a No Telp",
+                id_departement: "Please select a Departement",
+                role: "Please enter a Role",
+                email: "Please enter a valid email",
+                password: {
+                    required: "Please enter a Password",
+                    minlength: "Your password must be at least 6 characters long",
+                },
+                confirm_password: {
+                    required: "Please enter a Confirm Password",
+                    minlength: "Your password must be at least 6 characters long",
+                }
+            },
+            errorPlacement: function(error, element) {
+                error.addClass( "invalid-feedback" );
+        
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                }
+                else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function () {
+                $.ajax({
+                    url: "../../Backend/edit_user",
+                    data: form_data,
+                    type: "POST",
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    async: false,
+                    success: function(value) {
+                        if (value.status == 'Password Tidak Match!') {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Password Tidak Match'
+                            })
+                        } else if (value.status == 'Gagal Upload Foto') {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Gagal Upload Foto'
+                            })
+                        } else if (value.status == false) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Gagal Update User'
+                            })
+                        } else {
+                            show_profile(id)
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Data User Berhasil Di Update'
+                            })
+                        }
+                    }
+                })
             }
         })
     })

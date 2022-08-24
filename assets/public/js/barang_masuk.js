@@ -27,9 +27,6 @@ $(function() {
             orderable: false,
             targets: 0,
         }, ],
-        order: [
-            [1, 'asc']
-        ],
         columns: [{
             render: function(data, type, row) {
                 return `<div style="text-align:center;">${row.id_barang_masuk}</div>`;
@@ -117,28 +114,70 @@ $(function() {
     })
 
     $('#save_edit').click(function() {
-        $.ajax({
-            url: '../Backend/edit_barang_masuk',
-            type: 'GET',
-            typeData: 'JSON',
-            data: $('#form_edit').serialize(),
-            beforeSend: function() {
-                $("#save_edit").prop("disabled", true).html('...Loading');
+        $("#form_edit").validate({
+            rules: {
+                tgl_datang: {
+                    required: true,
+                },
+                id_supplier: {
+                    required: true,
+                },
+                id_barang: {
+                    required: true,
+                },
+                satuan: {
+                    required: true,
+                },
+                qty: {
+                    required: true,
+                },
+                expired_date: {
+                    required: true,
+                }
             },
-            success: function(value) {
-                $('#edit').modal('hide');
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Data Barang Masuk Berhasil Di Update'
+            messages: {
+                tgl_datang: "Please enter a Tanggal Datang",
+                id_supplier: "Please select a Nama Supplier",
+                id_barang: "Please select a Nama Barang",
+                satuan: "Please select a Satuan",
+                qty: "Please enter a QTY",
+                expired_date: "Please enter a Tanggal Expired",
+            },
+            errorPlacement: function(error, element) {
+                error.addClass( "invalid-feedback" );
+        
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                }
+                else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function () {
+                $.ajax({
+                    url: '../Backend/edit_barang_masuk',
+                    type: 'GET',
+                    typeData: 'JSON',
+                    data: $('#form_edit').serialize(),
+                    beforeSend: function() {
+                        $("#save_edit").prop("disabled", true).html('...Loading');
+                    },
+                    success: function(value) {
+                        $('#edit').modal('hide');
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data Barang Masuk Berhasil Di Update'
+                        })
+                        table.ajax.reload();
+                    },
+                    complete: function() {
+                        $("#save_edit").prop("disabled", false).html("Save");
+                        $("#select2supplier").val([]).trigger("change");
+                        $("#select2barang").val([]).trigger("change");
+                        $("#select2satuan").val([]).trigger("change");
+                        $("#form_edit").trigger("reset");
+                    }
                 })
-                table.ajax.reload();
-            },
-            complete: function() {
-                $("#save_edit").prop("disabled", false).html("Save");
-                $("#select2supplier").val([]).trigger("change");
-                $("#select2barang").val([]).trigger("change");
-                $("#select2satuan").val([]).trigger("change");
-                $("#form_edit").trigger("reset");
             }
         })
     })

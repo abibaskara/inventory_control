@@ -41,11 +41,11 @@
                                 <td>
                                     <div class="mb-3">
                                         <label for="barang" class="form-label">Barang</label>
-                                        <select class="form-select" name="id_barang[]" id="select2barang" data-width="100%" required></select>
+                                        <select class="form-select" name="id_barang[]" id="select2barang" data-width="100%"></select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="qty" class="form-label">Qty</label>
-                                        <input type="number" class="form-control" name="qty_permintaan[]" min='0' required>
+                                        <input type="number" class="form-control" name="qty_permintaan[]" min='0'>
                                     </div>
                                     <div class="mb-3">
                                         <label for="qty" class="form-label">Keterangan Permintaan</label>
@@ -59,11 +59,11 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-12 grid-margin">
+            <button type="submit" id="simpan" class="btn btn-primary" style="width: 10%;"><i class="fa fa-save"></i> Simpan</button>
+            <a href="<?= base_url() ?>Inventory/Request_Permintaan_Barang"><button type="button" class="btn btn-secondary"><i data-feather="arrow-left-circle"></i> Back</button></a>
+        </div>
     </form>
-    <div class="col-lg-12 grid-margin">
-        <button id="simpan" type="button" class="btn btn-primary" style="width: 10%;"><i class="fa fa-save"></i> Simpan</button>
-        <a href="<?= base_url() ?>Inventory/Request_Permintaan_Barang"><button class="btn btn-secondary"><i data-feather="arrow-left-circle"></i> Back</button></a>
-    </div>
 </div>
 
 <!-- core:js -->
@@ -71,6 +71,7 @@
 <!-- endinject -->
 
 <!-- Plugin js for this page -->
+<script src="<?= base_url() ?>assets/vendors/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/sweetalert2/sweetalert2.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/select2/select2.min.js"></script>
 <!-- End plugin js for this page -->

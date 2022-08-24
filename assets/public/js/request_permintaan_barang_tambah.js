@@ -50,31 +50,60 @@ $(function() {
         no++
     })
 
-    $('#simpan').click(function() {
-        $.ajax({
-            url: '../Backend/tambahpermintaan_barang',
-            type: 'GET',
-            dataType: 'JSON',
-            data: $('#form_tambah').serialize(),
-            success: function(x) {
-                if(x.status == 'Cek Stok Barang Anda!'){
-                    Toast.fire({
-                        icon: 'error',
-                        title: x.message
-                    })
-                } else {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Data Berhasil Di Simpan'
-                    })
-                    $("#form_tambah").trigger("reset")
-                    get_departement(id_user)
-                    $("#loop_row").empty().append()
-                    $("#select2barang").val([]).trigger("change")
-                }
-               
+    $("#form_tambah").validate({
+        onfocusout: false,    
+        rules: {
+            'id_barang[]': {
+                required: true,
             },
-        })
+            'qty_permintaan[]': {
+                required: true,
+            }
+        },
+        messages: {
+            'id_barang[]': "Please select a Barang",
+            'qty_permintaan[]': "Please enter a Qty Permintaan",
+        },
+        errorPlacement: function(error, element) {
+            error.addClass( "invalid-feedback" );
+    
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            }
+            else {
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function () {
+            var form_data = new FormData(document.getElementById("form_tambah"));
+            $.ajax({
+                    url: '../Backend/tambahpermintaan_barang',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: form_data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    async: false,
+                    success: function(x) {
+                        if(x.status == 'Cek Stok Barang Anda!'){
+                            Toast.fire({
+                                icon: 'error',
+                                title: x.message
+                            })
+                        } else {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Data Berhasil Di Simpan'
+                            })
+                            $("#form_tambah").trigger("reset")
+                            get_departement(id_user)
+                            $("#loop_row").empty().append()
+                            $("#select2barang").val([]).trigger("change")
+                        }
+                    },
+                })
+        }
     })
 })
 

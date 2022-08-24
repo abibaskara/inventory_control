@@ -70,7 +70,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="save_edit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" id="save_edit" class="btn btn-primary">Save changes</button>
                 </div>
             </form>
         </div>
@@ -109,6 +109,7 @@
 <!-- End plugin js for this page -->
 
 <!-- inject:js -->
+<script src="<?= base_url() ?>assets/vendors/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/feather-icons/feather.min.js"></script>
 <script src="<?= base_url() ?>assets/js/template.js"></script>
 <!-- endinject -->

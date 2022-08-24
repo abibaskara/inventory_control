@@ -43,7 +43,7 @@
                                 <th style="text-align: center;">Satuan</th>
                                 <th style="text-align: center;">QTY</th>
                                 <th style="text-align: center;">Expired Date</th>
-                                <th style="text-align: center;"><button id="tambah_barang" class="btn btn-primary"><i data-feather="plus-circle"></i></button></th>
+                                <th style="text-align: center;"><button type="button" id="tambah_barang" class="btn btn-primary"><i data-feather="plus-circle"></i></button></th>
                             </tr>
                         </thead>
                         <tbody id="body_barang">
@@ -54,7 +54,7 @@
                                     <input type="hidden" id="id_barang1" name="id_barang[]">
                                 </td>
                                 <td>
-                                    <select class="form-select" id="select2barang1" data-width="100%" required></select>
+                                    <select class="form-select" id="select2barang1" name="selectbarang_val[]" data-width="100%" required></select>
                                 </td>
                                 <td>
                                     <select class="form-select" id="select2satuan" name="satuan[]" data-width="100%" required>
@@ -80,7 +80,7 @@
                                     </div>
                                 </td>
                                 <td style="text-align: center;">
-                                    <button id="hapus_barang1" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                                    <button type="button" id="hapus_barang1" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -88,12 +88,12 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-12">
+            <button type="submit" id="simpan" style="width: 10%;" class="btn btn-success"><i class="fa fa-save"></i> Simpan</button>
+            <button type="button" id="print" style="width: 20%;" class="btn btn-primary"><i class="fa fa-print"></i> Print Batch Number</button>
+            <button type="button" class="btn btn-secondary" id="back" style="width: 10%;"><i class="fa fa-arrow-left"></i> Kembali</button>
+        </div>
     </form>
-    <div class="col-lg-12">
-        <button id="simpan" style="width: 10%;" class="btn btn-success"><i class="fa fa-save"></i> Simpan</button>
-        <button id="print" style="width: 20%;" class="btn btn-primary"><i class="fa fa-print"></i> Print Batch Number</button>
-        <button class="btn btn-secondary" id="back" style="width: 10%;"><i class="fa fa-arrow-left"></i> Kembali</button>
-    </div>
 
 </div>
 
@@ -130,6 +130,7 @@
 <!-- End plugin js for this page -->
 
 <!-- inject:js -->
+<script src="<?= base_url() ?>assets/vendors/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/feather-icons/feather.min.js"></script>
 <script src="<?= base_url() ?>assets/js/template.js"></script>
 <!-- endinject -->

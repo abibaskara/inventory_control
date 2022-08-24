@@ -11,9 +11,6 @@ $(function () {
             orderable: false,
             targets: 0,
         }, ],
-        order: [
-            [1, 'asc']
-        ],
         columns: [{
             render: function(data, type, row) {
                 return `<div style="text-align:center;">${row.id_po}</div>`;

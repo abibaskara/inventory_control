@@ -559,13 +559,13 @@ class Backend extends CI_Controller
 
     public function tambahBarangMasuk()
     {
-        $tgl_datang = date('Y-m-d', strtotime($this->input->get('tanggal_kedatangan')));
-        $id_supplier = $this->input->get('id_supplier');
+        $tgl_datang = date('Y-m-d', strtotime($this->input->post('tanggal_kedatangan')));
+        $id_supplier = $this->input->post('id_supplier');
 
-        $batch_number = $this->input->get('batch_number');
-        $id_barang = $this->input->get('id_barang');
-        $satuan = $this->input->get('satuan');
-        $qty_masuk = $this->input->get('qty');
+        $batch_number = $this->input->post('batch_number');
+        $id_barang = $this->input->post('id_barang');
+        $satuan = $this->input->post('satuan');
+        $qty_masuk = $this->input->post('qty');
 
         if (!$this->input->is_ajax_request()) {
             $result['status'] = false;
@@ -579,7 +579,7 @@ class Backend extends CI_Controller
                         'id_barang' => $id_barang[$i],
                         'satuan' => $satuan[$i],
                         'qty_masuk' => $qty_masuk[$i],
-                        'exp' => date('Y-m-d', strtotime($this->input->get('expired_date')[$i]))
+                        'exp' => date('Y-m-d', strtotime($this->input->post('expired_date')[$i]))
                     ];
                     $where['id_barang'] = $id_barang[$i];
                     $query = $this->AdminModel->cekData('stok_barang', $where);
@@ -855,11 +855,11 @@ class Backend extends CI_Controller
 
     public function tambahpermintaan_barang()
     {
-        $id_departement = $this->input->get('id_departement');
-        $id_barang = $this->input->get('id_barang');
-        $qty_permintaan = $this->input->get('qty_permintaan');
-        $ket_permintaan = $this->input->get('ket_permintaan');
-        $tgl_permintaan = date('Y-m-d', strtotime($this->input->get('tgl_permintaan')));
+        $id_departement = $this->input->post('id_departement');
+        $id_barang = $this->input->post('id_barang');
+        $qty_permintaan = $this->input->post('qty_permintaan');
+        $ket_permintaan = $this->input->post('ket_permintaan');
+        $tgl_permintaan = date('Y-m-d', strtotime($this->input->post('tgl_permintaan')));
 
         if (!$this->input->is_ajax_request()) {
             $result['status'] = false;
@@ -986,10 +986,10 @@ class Backend extends CI_Controller
 
     public function tambahDetail_Permintaan()
     {
-        $id_detail_permintaan = $this->input->get('id');
-        $id_barang = $this->input->get('id_barang');
-        $qty_permintaan = $this->input->get('qty_permintaan');
-        $ket_permintaan = $this->input->get('ket_permintaan');
+        $id_detail_permintaan = $this->input->post('id');
+        $id_barang = $this->input->post('id_barang');
+        $qty_permintaan = $this->input->post('qty_permintaan');
+        $ket_permintaan = $this->input->post('ket_permintaan');
         if (!$this->input->is_ajax_request()) {
             $result['status'] = false;
         } else {
@@ -1050,6 +1050,20 @@ class Backend extends CI_Controller
 
     // ####################################### PROSES PERMINTAAN BARANG #######################################//
 
+    public function get_permintaan_proses()
+    {
+        $id['id_permintaan'] = $this->input->get('id');
+        $join = 'departement.id_departement=permintaan_barang.id_departement';
+        $join2 = 'barang.id_barang=detail_permintaan.id_barang';
+        if (!$this->input->is_ajax_request()) {
+            $result['status'] = false;
+        } else {
+            $permintaan = $this->AdminModel->join_Where('permintaan_barang', 'departement', $join, $id)->row_array();
+            $where['id_permintaan'] = $permintaan['id_detail_permintaan'];
+            $result['data'] = $this->AdminModel->join_Where('detail_permintaan', 'barang', $join2, $where)->result();
+        }
+        echo json_encode($result);
+    }
     public function get_proses_permintaan()
     {
         $id['id_permintaan'] = $this->input->get('id');
@@ -1063,7 +1077,6 @@ class Backend extends CI_Controller
             $barang = $this->AdminModel->join_Where('detail_permintaan', 'barang', $join2, $where)->result();
 
             foreach ($barang as $row) {
-
                 $kondisi['barang_masuk.id_barang'] = $row->id_barang;
                 $get_barang = $this->AdminModel->get_barang('barang_masuk', $kondisi)->result();
                 if ($get_barang) {
@@ -1113,76 +1126,106 @@ class Backend extends CI_Controller
         echo json_encode($result);
     }
 
+    public function search()
+    {
+        $batch_number = $this->input->get('batch_number');
+        if (!$this->input->is_ajax_request()) {
+            $result['status'] = false;
+        } else {
+            $result['data'] = $this->AdminModel->SearchBatch('barang_masuk', $batch_number);
+            $result['status'] = true;
+        }
+        echo json_encode($result);
+    }
+
+    public function barang_keluar()
+    {
+        if (!$this->input->is_ajax_request()) {
+            $result['status'] = false;
+        } else {
+            $id['id_permintaan'] = $this->input->get('id');
+            $join = 'barang.id_barang=barang_keluar.id_barang';
+            $barang_keluar = $this->AdminModel->join_Where('barang_keluar', 'barang', $join, $id)->result();
+            if ($barang_keluar) {
+                $result['barang_keluar'] = $barang_keluar;
+            } else {
+                $result['barang_keluar'] = NULL;
+            }
+        }
+        echo json_encode($result);
+    }
+
     public function ProsesPermintaan()
     {
         $id_barang = $this->input->get('id_barang');
-        $id_detail_permintaan = $this->input->get('id_detail_permintaan');
         $id_permintaan = $this->input->get('id_permintaan');
-        $id_departement = $this->input->get('id_departement');
         $batch_number = $this->input->get('batch_number');
         $qty_keluar = $this->input->get('qty_keluar');
         $ketersediaan = $this->input->get('ketersediaan');
-
+        $detail_permintaan = $this->AdminModel->getDetailPermintaan($id_permintaan, $id_barang);
+        $where['id_permintaan'] = $id_permintaan;
+        $departement = $this->AdminModel->getWhere('permintaan_barang', $where)->row_array();
+        $id_departement = $departement['id_departement'];
+        $id_detail_permintaan = $detail_permintaan['id_detail_permintaan'];
         if (!$this->input->is_ajax_request()) {
             $result['status'] = false;
         } else {
             try {
-                for ($i = 0; $i < count($id_barang); $i++) {
-                    if ($qty_keluar[$i] > $ketersediaan[$i]) {
-                        $result['status'] = 'Input Data Kuantiti Salah!';
-                    } else {
-                        //update barang masuk
-                        $out = $ketersediaan[$i] - $qty_keluar[$i];
-                        $update_barang_masuk = [
-                            'qty_masuk' => $out,
-                        ];
-                        $where_barang_masuk['batch_number'] = $batch_number[$i];
+                if ($qty_keluar > $ketersediaan) {
+                    $result['status'] = 'Input Data Kuantiti Salah!';
+                } else {
+                    //update barang masuk
+                    $out = $ketersediaan - $qty_keluar;
+                    $update_barang_masuk = [
+                        'qty_masuk' => $out,
+                    ];
+                    $where_barang_masuk['batch_number'] = $batch_number;
 
-                        // update detail permintaan 
-                        $where_detail_permintaan['id_detail_permintaan'] = $id_detail_permintaan[$i];
-                        $qty_detail = $this->AdminModel->getWhere('detail_permintaan', $where_detail_permintaan)->row_array();
-                        $out_detail = $qty_detail['qty_keluar_permintaan'] + $qty_keluar[$i];
-                        $update_detail_permintaan = [
-                            'qty_keluar_permintaan' => $out_detail,
-                        ];
+                    // update detail permintaan 
+                    $where_detail_permintaan['id_detail_permintaan'] = $id_detail_permintaan;
+                    $qty_detail = $this->AdminModel->getWhere('detail_permintaan', $where_detail_permintaan)->row_array();
+
+                    $out_detail = $qty_detail['qty_keluar_permintaan'] + $qty_keluar;
+                    $update_detail_permintaan = [
+                        'qty_keluar_permintaan' => $out_detail,
+                    ];
 
 
-                        // update stok barang 
-                        $where_stok['id_barang'] = $id_barang[$i];
-                        $qty_stok = $this->AdminModel->getWhere('stok_barang', $where_stok)->row_array();
-                        $out_stok = $qty_stok['qty_stok'] - $qty_keluar[$i];
-                        $update_stok_barang = [
-                            'qty_stok' => $out_stok
-                        ];
+                    // update stok barang 
+                    $where_stok['id_barang'] = $id_barang;
+                    $qty_stok = $this->AdminModel->getWhere('stok_barang', $where_stok)->row_array();
+                    $out_stok = $qty_stok['qty_stok'] - $qty_keluar;
+                    $update_stok_barang = [
+                        'qty_stok' => $out_stok
+                    ];
 
-                        //update barang keluar
-                        $update_barang_keluar = [
-                            'tgl_keluar' => date('Y-m-d'),
-                            'id_permintaan' => $id_permintaan,
-                            'id_departement' => $id_departement,
-                            'id_barang' => $id_barang[$i],
-                            'qty_diserahkan' => $qty_keluar[$i],
-                            'batch_number' => $batch_number[$i],
-                        ];
+                    //update barang keluar
+                    $update_barang_keluar = [
+                        'tgl_keluar' => date('Y-m-d'),
+                        'id_permintaan' => $id_permintaan,
+                        'id_departement' => $id_departement,
+                        'id_barang' => $id_barang,
+                        'qty_diserahkan' => $qty_keluar,
+                        'batch_number' => $batch_number,
+                    ];
 
-                        if ($qty_keluar[$i] != 0) {
-                            $this->db->trans_start();
-                            if ($out == 0) {
-                                $this->db->delete('barang_masuk', $where_barang_masuk);
-                            } else {
-                                $this->db->update('barang_masuk', $update_barang_masuk, $where_barang_masuk);
-                            }
+                    if ($qty_keluar != 0) {
+                        $this->db->trans_start();
+                        if ($out == 0) {
+                            $this->db->delete('barang_masuk', $where_barang_masuk);
+                        } else {
+                            $this->db->update('barang_masuk', $update_barang_masuk, $where_barang_masuk);
+                        }
 
-                            $this->db->update('detail_permintaan', $update_detail_permintaan, $where_detail_permintaan);
-                            $this->db->update('stok_barang', $update_stok_barang, $where_stok);
-                            $this->db->insert('barang_keluar', $update_barang_keluar);
+                        $this->db->update('detail_permintaan', $update_detail_permintaan, $where_detail_permintaan);
+                        $this->db->update('stok_barang', $update_stok_barang, $where_stok);
+                        $this->db->insert('barang_keluar', $update_barang_keluar);
 
-                            $this->db->trans_complete();
-                            if ($this->db->trans_status() === FALSE) {
-                                $this->db->trans_rollback();
-                            } else {
-                                $this->db->trans_commit();
-                            }
+                        $this->db->trans_complete();
+                        if ($this->db->trans_status() === FALSE) {
+                            $this->db->trans_rollback();
+                        } else {
+                            $this->db->trans_commit();
                         }
                     }
                 }
@@ -1267,9 +1310,9 @@ class Backend extends CI_Controller
 
     public function simpanPO()
     {
-        $id_barang = $this->input->get('id_barang');
-        $qty_po = $this->input->get('qty_po');
-        $ket_po = $this->input->get('ket_po');
+        $id_barang = $this->input->post('id_barang');
+        $qty_po = $this->input->post('qty_po');
+        $ket_po = $this->input->post('ket_po');
 
         if (!$this->input->is_ajax_request()) {
             $result['status'] = false;
@@ -1332,7 +1375,7 @@ class Backend extends CI_Controller
     public function get_detail_po()
     {
         $id = $this->input->get('id');
-        $sum = 'SUM(qty_po) AS Total';;
+        $sum = 'SUM(qty_po) AS Total';
         if (!$this->input->is_ajax_request()) {
             $result['status'] = false;
         } else {

@@ -61,13 +61,13 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <select name="id_barang[]" id="select2barang" class="form-control" style="width: 100%;"></select>
+                                        <select name="id_barang[]" id="select2barang" class="form-control" style="width: 100%;" required></select>
                                     </td>
                                     <td>
-                                        <input type="number" name="qty_po[]" min="0" class="form-control">
+                                        <input type="number" name="qty_po[]" min="0" class="form-control" required>
                                     </td>
                                     <td>
-                                        <textarea name="ket_po[]" cols="30" rows="10" class="form-control"></textarea>
+                                        <textarea name="ket_po[]" cols="30" rows="10" class="form-control" required></textarea>
                                     </td>
                                     <td style="text-align: center;">
                                     </td>
@@ -77,9 +77,9 @@
 
                             </tbody>
                         </table>
+                        <button type="submit" class="mt-2 btn btn-success" id="simpan"><i class="fa fa-save"></i> Simpan</button>
+                        <a href="<?= base_url() ?>Inventory/PO"><button class="mt-2 btn btn-secondary" type="button"><i class="fa fa-arrow-circle-left"></i> Back</button></a>
                     </form>
-                    <button class="mt-2 btn btn-success" id="simpan"><i class="fa fa-save"></i> Simpan</button>
-                    <a href="<?= base_url() ?>Inventory/PO"><button class="mt-2 btn btn-secondary"><i class="fa fa-arrow-circle-left"></i> Back</button></a>
                 </div>
             </div>
         </div>
@@ -92,6 +92,7 @@
 
 
 <!-- inject:js -->
+<script src="<?= base_url() ?>assets/vendors/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="<?= base_url() ?>assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js"></script>
 <script src="<?= base_url() ?>assets/vendors/feather-icons/feather.min.js"></script>

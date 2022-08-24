@@ -41,12 +41,12 @@ $(function() {
     $('thead').on('click', '#tambah_barang', function() {
         var tr = `<tr>
                     <td>
-                        <input type="text" class="form-control" name="batch_number[]" id="batch_number${no}" readonly required>
+                        <input type="text" class="form-control" name="batch_number[]" id="batch_number${no}" readonly>
                         <input type="hidden" id="id_batch${no}" name="id_batch">
                         <input type="hidden" id="id_barang${no}" name="id_barang[]">
                     </td>
                     <td>
-                        <select class="form-select" id="select2barang${no}" data-width="100%" required></select>
+                        <select class="form-select" id="select2barang${no}" data-width="100%" name="selectbarang_val[]"  required></select>
                     </td>
                     <td>
                         <select class="form-select" id="select2satuan${no}" name="satuan[]" data-width="100%" required>
@@ -72,7 +72,7 @@ $(function() {
                         </div>
                     </td>
                     <td style="text-align: center;">
-                        <button id="hapus_barang${no}" data-id="${no}" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                        <button type="button" id="hapus_barang${no}" data-id="${no}" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
                     </td>
                 </tr>`
         var print = `
@@ -235,21 +235,36 @@ $(function() {
         document.getElementById("row1").remove();
     });
 
-    $('#simpan').click(function() {
+
+    $('#form_barang').submit(function(e) {
+        e.preventDefault();
+        var form_data = new FormData(document.getElementById("form_barang"));
         $.ajax({
             url: '../Backend/tambahBarangMasuk',
-            type: 'GET',
+            data: form_data,
+            type: 'POST',
             dataType: 'JSON',
-            data: $('#form_barang').serialize(),
+            processData: false,
+            contentType: false,
+            cache: false,
+            async: false,
             success: function(value) {
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Data Berhasil Di Simpan'
-                })
-                $("#form_barang").trigger("reset");
-                $("#body_barang").empty().append();
-                $("#select2supplier").val([]).trigger("change");
-                refresh_batch()
+                console.log(value)
+                if(value.status == 'error validation') {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Pastikan semua data terisi!'
+                    })
+                } else {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data Berhasil Di Simpan'
+                    })
+                    $("#form_barang").trigger("reset");
+                    $("#body_barang").empty().append();
+                    $("#select2supplier").val([]).trigger("change");
+                    refresh_batch()
+                }
             },
         })
     })

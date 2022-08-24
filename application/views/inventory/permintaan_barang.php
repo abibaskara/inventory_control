@@ -55,6 +55,7 @@
 <!-- endinject -->
 
 <!-- Plugin js for this page -->
+<script src="<?= base_url() ?>assets/vendors/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/sweetalert2/sweetalert2.min.js"></script>
 <script src="<?= base_url() ?>assets/vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="<?= base_url() ?>assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js"></script>

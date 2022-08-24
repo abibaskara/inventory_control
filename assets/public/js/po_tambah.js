@@ -87,34 +87,84 @@ $(function () {
         no++
     })
 
-    $('#simpan').click(function () { 
-        $.ajax({
-            url: '../Backend/simpanPO',
-            type: 'GET',
-            dataType: 'JSON',
-            data: $('#form_tambah').serialize(),
-
-            success: function (x) { 
-                if(x.status == true)
-                {
-                    Toast.fire({
-                        icon: 'success',
-                        title: x.message,
-                    })
-                    $("#form_tambah").trigger("reset")
-                    $('#select2barang').val([]).trigger("change");
-                    $("#table_tambah_loop").empty().append()
-                } else {
-                    Toast.fire({
-                        icon: 'success',
-                        title: x.message,
-                    })
-                    $("#form_tambah").trigger("reset")
-                    $('#select2barang').val([]).trigger("change");
-                    $("#table_tambah_loop").empty().append()
-                }
+    $("#form_tambah").validate({
+        onfocusout: false,    
+        rules: {
+            'id_barang[]': {
+                required: true,
+            },
+            'qty_po[]': {
+                required: true,
+            },
+            'ket_po[]': {
+                required: true,
             }
-        })
+        },
+        messages: {
+            'id_barang[]': "This field is required",
+            'qty_po[]': "This field is required",
+            'ket_po[]': "This field is required",
+        },
+        errorPlacement: function(error, element) {
+            error.addClass( "invalid-feedback" );
+
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            }
+            else if (element.prop('type') === 'radio' && element.parent('.radio-inline').length) {
+                error.insertAfter(element.parent().parent());
+            }
+            else if (element.prop('type') === 'checkbox' || element.prop('type') === 'radio') {
+                error.appendTo(element.parent().parent());
+            }
+            else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function(element, errorClass) {
+        if ($(element).prop('type') != 'checkbox' && $(element).prop('type') != 'radio') {
+            $( element ).addClass( "is-invalid" ).removeClass( "is-valid" );
+        }
+        },
+        unhighlight: function(element, errorClass) {
+        if ($(element).prop('type') != 'checkbox' && $(element).prop('type') != 'radio') {
+            $( element ).addClass( "is-valid" ).removeClass( "is-invalid" );
+        }
+        },
+        submitHandler: function () {
+            var form_data = new FormData(document.getElementById("form_tambah"));
+            $.ajax({
+                url: '../Backend/simpanPO',
+                type: 'POST',
+                dataType: 'JSON',
+                data: form_data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                async: false,
+                success: function (x) { 
+                    console.log(x)
+                    if(x.status == true)
+                    {
+                        Toast.fire({
+                            icon: 'success',
+                            title: x.message,
+                        })
+                        $("#form_tambah").trigger("reset")
+                        $('#select2barang').val([]).trigger("change");
+                        $("#table_tambah_loop").empty().append()
+                    } else {
+                        Toast.fire({
+                            icon: 'success',
+                            title: x.message,
+                        })
+                        $("#form_tambah").trigger("reset")
+                        $('#select2barang').val([]).trigger("change");
+                        $("#table_tambah_loop").empty().append()
+                    }
+                }
+            })
+        }
     })
 })
 

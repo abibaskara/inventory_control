@@ -165,4 +165,22 @@ class AdminModel extends CI_Model
         $this->db->group_by('id_barang');
         return $this->db->get();
     }
+
+    function SearchBatch($database, $where)
+    {
+        $this->db->select('*');
+        $this->db->from($database);
+        $this->db->join('barang', 'barang.id_barang=barang_masuk.id_barang');
+        $this->db->where('batch_number', $where);
+        return $this->db->get()->row_array();
+    }
+
+    function getDetailPermintaan($id_permintaan, $id_barang)
+    {
+        $this->db->select('*');
+        $this->db->from('detail_permintaan');
+        $this->db->where('id_permintaan', $id_permintaan);
+        $this->db->where('id_barang', $id_barang);
+        return $this->db->get()->row_array();
+    }
 }

@@ -63,64 +63,120 @@ $(function() {
         no++
     })
 
-    $('#simpan').click(function() {
-        $.ajax({
-            url: '../../Backend/tambahDetail_Permintaan',
-            type: 'GET',
-            dataType: 'JSON',
-            data: $('#form_edit').serialize(),
-            success: function(x) {
-                if (x.status == true) {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Data Detail Permintaan Barang Berhasil Di Simpan'
-                    })
-                    $("#form_edit").trigger("reset")
-                    $("#row").empty().append()
-                    $("#tambah_row").empty().append()
-                    get_permintaan(id)
-                } else {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Data Detail Permintaan Barang Gagal Di Simpan'
-                    })
-                }
-
+    $("#form_edit").validate({
+        onfocusout: false,
+        rules: {
+            'id_barang[]': {
+                required: true,
             },
-        })
+            'qty_permintaan[]': {
+                required: true,
+            }
+        },
+        messages: {
+            'id_barang[]': "Please select a Barang",
+            'qty_permintaan[]': "Please enter a Qty Permintaan",
+        },
+        errorPlacement: function(error, element) {
+            error.addClass( "invalid-feedback" );
+    
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            }
+            else {
+                error.insertAfter(element);
+            }
+        },
+        submitHandler: function () {
+            var form_data = new FormData(document.getElementById("form_edit"));
+            $.ajax({
+                url: '../../Backend/tambahDetail_Permintaan',
+                type: 'POST',
+                dataType: 'JSON',
+                data: form_data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                async: false,
+                success: function(x) {
+                    if (x.status == true) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data Detail Permintaan Barang Berhasil Di Simpan'
+                        })
+                        $("#form_edit").trigger("reset")
+                        $("#row").empty().append()
+                        $("#tambah_row").empty().append()
+                        get_permintaan(id)
+                    } else {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data Detail Permintaan Barang Gagal Di Simpan'
+                        })
+                    }
+
+                },
+            })
+        }
     })
 
     $('#save_edit').click(function() {
-        $.ajax({
-            url: '../../Backend/editBarang_Permintaan',
-            type: 'GET',
-            dataType: 'JSON',
-            data: $('#form_edit_modal').serialize(),
-            success: function(x) {
-                if (x.status == true) {
-                    $('#edit').modal('hide')
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Data Permintaan Barang Berhasil Di Update'
-                    })
-                    $("#row").empty().append()
-                    get_permintaan(id)
-                } else if(x.status == 'Cek Stok Barang Anda!'){
-                    Toast.fire({
-                        icon: 'error',
-                        title: x.message,
-                    })
-                    $("#row").empty().append()
-                    get_permintaan(id)
-                } else {
-                    $('#edit').modal('hide')
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Data Permintaan Barang Gagal Di Update'
-                    })
-                    $("#row").empty().append()
-                    get_permintaan(id)
+        $("#form_edit_modal").validate({
+            rules: {
+                id_barang: {
+                    required: true,
+                },
+                qty_permintaan: {
+                    required: true,
                 }
+            },
+            messages: {
+                id_barang: "Please select a Barang",
+                qty_permintaan: "Please enter a Qty Permintaan",
+            },
+            errorPlacement: function(error, element) {
+                error.addClass( "invalid-feedback" );
+        
+                if (element.parent('.input-group').length) {
+                    error.insertAfter(element.parent());
+                }
+                else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function () {
+                $.ajax({
+                    url: '../../Backend/editBarang_Permintaan',
+                    type: 'GET',
+                    dataType: 'JSON',
+                    data: $('#form_edit_modal').serialize(),
+                    success: function(x) {
+                        if (x.status == true) {
+                            $('#edit').modal('hide')
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Data Permintaan Barang Berhasil Di Update'
+                            })
+                            $("#row").empty().append()
+                            get_permintaan(id)
+                        } else if(x.status == 'Cek Stok Barang Anda!'){
+                            Toast.fire({
+                                icon: 'error',
+                                title: x.message,
+                            })
+                            $("#row").empty().append()
+                            get_permintaan(id)
+                        } else {
+                            $('#edit').modal('hide')
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Data Permintaan Barang Gagal Di Update'
+                            })
+                            $("#row").empty().append()
+                            get_permintaan(id)
+                        }
+                    }
+                })
             }
         })
     })
